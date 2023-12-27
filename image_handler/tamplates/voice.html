@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Input</title>
+    <style>
+        .krish{
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    text-align: center;
+}
+
+#textInput, [name="voice_lang"], [name="voice_tran_lang"] {
+    padding: 10px;
+    margin: 5px;
+    width: 300px;
+    box-sizing: border-box;
+}
+
+#voiceButton {
+    padding: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#voiceButton:disabled {
+    background-color: #b3b3b3;
+    cursor: not-allowed;
+}
+
+input[type="submit"] {
+    padding: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* Optional: Style for better visibility of the listening text */
+#textInput[placeholder="Voice Input"][value="Listening..."] {
+    color: #4caf50;
+    font-style: italic;
+}
+
+.kri{
+    border: 2px solid black;
+    /* width: 100%; */
+
+    /* display: block;/ */
+    height: 200px;
+}
+    </style>
+</head>
+<body>
+    <div class="krish">
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<input type="text" id="textInput" placeholder="Voice Input" name="voice_text">
+<button id="voiceButton">Click to Speak</button>
+<input type="text" name="voice_lang" placeholder="Enter your filename">
+<!-- <input type="submit" value="getvoice"> -->
+
+
+<input type="text" name="voice_tran_lang" placeholder="Enter In which langu you want to tranlate">
+<input type="submit" value="Tranlate">
+</form>
+
+</div>
+<div class="kri">
+{%for i in voc%}
+    <p> {{i.tran_texte}}</p>
+    <audio controls>
+        <source src="{{i.tran_voice}}">
+    </audio>
+    {%endfor%}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const voiceButton = document.getElementById('voiceButton');
+    const textInput = document.getElementById('textInput');
+
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            textInput.value = transcript;
+        };
+
+        recognition.onerror = function(event) {
+            textInput.value = 'Error occurred in recognition: ' + event.error;
+        };
+
+        recognition.onend = function() {
+            voiceButton.disabled = false;
+        };
+
+        voiceButton.addEventListener('click', function() {
+            recognition.start();
+            voiceButton.disabled = true;
+            textInput.value = 'Listening...';
+        });
+    } else {
+        textInput.value = 'Speech recognition is not supported in your browser.';
+    }
+});
+</script>
+
+</body>
+</html>

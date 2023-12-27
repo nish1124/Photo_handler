@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image handeler</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+.btn1{
+  padding:5px 10px;
+  background:#00ad2d;
+  border:1px solid #00ad2d;
+  position:absolute;
+  top: 15%;
+  left: 45%;
+  color:#fff;
+  border-radius:2px;
+  text-align:center;
+  float:left;
+  cursor:pointer
+}
+.hide_file {
+    position: absolute;
+    left: 40%;
+    z-index: 1000;
+    opacity: 0  ;
+    cursor: pointer;
+    right: 0;
+    top: 0;
+    height: 100%;
+    font-size: 24px;
+    width: 100%;
+    border: 2px solid black;
+}
+.upperpage{
+    height: 200px;
+    background-image: linear-gradient(rgb(96, 12, 231) , rgb(95, 44, 171) , rgb(111, 28, 159));
+    width: 100%;
+
+}
+.get{
+    position:absolute;
+    /* top: 55px; */
+    left: 53%;
+    /* bottom: 2%; */
+}
+#lang{
+position: relative;
+left: 41%;
+}
+    </style>
+</head>
+<body>
+    <div class="upperpage">
+
+    </div>
+    <form action="" method="post"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- <input type="image" src="" alt="" placeholder="Enter your text image" name="img" > -->
+        <div class="btn1">
+            Input the image
+        <input type="file" name="img" id="" class="hide_file">
+        </div>
+        <input type="text" name="lang" id="lang" placeholder="Enter your lang">
+        <input type="submit" value="get_text" class="get btn-success">
+    </form>
+    <!-- <img src="" > -->
+    {%for i in text%}
+    <img src="{{i.img}}" alt="" height="200px"  width="200px">
+    <p>
+        {{i.text}}
+    </p>
+    {%endfor%}
+    
+</body>
+</html>
